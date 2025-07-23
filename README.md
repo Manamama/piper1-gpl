@@ -13,6 +13,11 @@ Update 2:
 
 100 percent done, including the pesky CmakeList.txt, just 10 minutes later. Close to magic... 
 
+Update 3:
+
+We have just learnt what `pytest` may do, doing just that... 
+
+
 
 ## 🚀 Quick Start (Recommended Method)
 
