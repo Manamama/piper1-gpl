@@ -48,7 +48,7 @@ If my planned action fails this check—if it is a tactical solution that underm
 
 **Termux Environment and Shebangs:** Its crucial to understand that Termux operates on top of the Android OS. When a scripts shebang (e.g., `#!/bin/sh`) is invoked, it typically resolves to the *native Android system shell* (`/bin/sh`), not the Termux shell, unless specific Termux virtualization commands are employed. This native shell is often minimal and may not be suitable for complex build scripts. To ensure scripts are run by the full-featured Termux shell, explicitly invoke them with `/data/data/com.termux/files/usr/bin/bash -c "..."` or ensure the `PATH` is correctly set for the sub-process. If unsure about the nature of a binary or script, use `file <path>` or `ldd <path>` to inspect it.
 
-When testing the ready `piper` package do use the audio models which are located in `~/.cache/piper`. Do use piper's --help to learn how to
+When testing the ready `piper` package do use the audio models which are located in `~/.cache/piper`. For the API synthesis test to pass, the `en_US-lessac-medium` voice model must be downloaded to `~/.cache/piper/` using `python3 -m piper.download_voices en_US-lessac-medium`. Do use piper's --help to learn how to
 
 ## Known Issues
 
