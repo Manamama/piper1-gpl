@@ -6,6 +6,10 @@ Piper is a high-quality, open-source text-to-speech (TTS) system that runs entir
 
 This fork is specifically optimized to ensure a smooth and reliable build experience on Termux (Android).
 
+Update 1: 
+95% of the work has been done (80 percent thereof by https://github.com/google-gemini/gemini-cli/, granted) and we are tying up the wrapping of CmakeList.txt into the original by now. The code compiles as such. 
+
+
 ## 🚀 Quick Start (Recommended Method)
 
 ### Prerequisites
