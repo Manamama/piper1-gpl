@@ -15,7 +15,7 @@ Update 2:
 
 Update 3:
 
-We have just learnt what `pytest` may do, doing just that... 
+We have just learnt what `pytest` may do, doing just that... Testing still fails, only the last 🪜, see https://github.com/Manamama/piper1-gpl/blob/termux-build-improvements/GEMINI.md
 
 
 
