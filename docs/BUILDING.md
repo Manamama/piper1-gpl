@@ -1,6 +1,6 @@
 # 🛠️ Building Piper-TTS: A Visual Guide
 
-![Build Architecture](../Architecture_materials/Mermaid%20Piper%2002.png)
+![Build Architecture](../Architecture_materials/Mermaid_Piper_02.png)
 
 This guide provides a detailed look at building the `piper-tts` Python module, which directly embeds [espeak-ng][].
 

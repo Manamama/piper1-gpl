@@ -31,7 +31,7 @@ This section summarizes the current state of building Piper TTS on Termux, highl
 The project now compiles successfully on Termux. The following key improvements have been made to streamline the build process:
 
 *   **Hybrid `espeak-ng` Strategy**: The build system employs a two-stage strategy for maximum reliability. It first ensures the system's `espeak-ng` package is installed via `pkg` to satisfy any underlying dependencies. It then proceeds to clone and compile a fresh version of `espeak-ng` from source. This guarantees that the project links against a known, consistent version of the library, eliminating potential ABI conflicts and ensuring a self-contained, robust build.
-*   **Automated ONNX Runtime Handling**: The `CMakeLists.txt` now automatically detects and links against the system-installed `libonnxruntime.so` provided by the `python-onnxruntime` Termux package. This eliminates the need for manual downloading, extraction, or linking against pre-compiled `.aar` files, ensuring better ABI compatibility and a more streamlined build process.
+*   **Automated ONNX Runtime Handling**: The `CMakeLists.txt` now automatically detects and links against the system's `libonnxruntime.so` provided by the `python-onnxruntime` Termux package. This eliminates the need for manual downloading, extraction, or linking against pre-compiled `.aar` files, ensuring better ABI compatibility and a more streamlined build process.
 *   **ABI Compatibility Resolved**: By ensuring all native C++ components (like `espeakbridge.so` and `piper_phonemize_cpp`) are built and linked against the system's `libc++` and other core libraries, the notorious ABI compatibility issues (such as the `nlohmann::json` parsing errors) are inherently addressed.
 *   **Simplified Installation**: The overall goal is to transform the installation into a "go for coffee" experience. After installing the initial `pkg` prerequisites, a simple `pip install piper-tts` will manage the compilation and linking of all native components, allowing the user to focus on using Piper rather than troubleshooting build errors.
 *   **Reduced Manual Intervention**: The need for manual extraction of `libonnxruntime.so` from `.aar` files or using `patchelf` for library path adjustments is significantly reduced or provided as clear fallback steps.
@@ -130,3 +130,26 @@ The project's `CMakeLists.txt` has been refactored to merge platform-specific bu
 *   **Unified `espeakbridge` Definition**: The `espeakbridge` Python C extension is defined once, with its linking and properties adjusted based on the target platform.
 *   **Automated Dependency Management for Android**: The Android-specific section retains the `pkg` calls for automatic installation of Termux prerequisites and the discovery of the system's `onnxruntime` library.
 *   **Renamed Original CMakeLists**: The original `CMakeLists.txt` (version 1.3.0) has been renamed to `CMakeLists.txt.bak` for historical reference.
+
+## Lessons Learned from Recent Development Session
+
+This section summarizes key insights and practical takeaways from the recent development session focused on improving the `piper1-gpl` build process and documentation.
+
+### Challenges Encountered:
+
+*   **`replace` tool limitations**: The `replace` tool proved challenging for complex, multi-line text manipulations due to its strict exact-match requirement (including whitespace and indentation). This led to repeated failures and inefficient iterations.
+*   **Over-aggressive content removal**: Initial attempts to simplify `README.md` resulted in the accidental removal of valuable end-user information, highlighting the need for a more nuanced approach to documentation updates.
+*   **Complexity of `CMakeLists.txt` merge**: While conceptually straightforward, the practical implementation of merging platform-specific CMake logic required meticulous attention to detail regarding variable scoping, external project configurations, and dependency management across Windows, Android, and generic Unix.
+
+### Successes and Facilitating Factors:
+
+*   **Effective problem understanding**: The existing `GEMINI.md` and clear error messages from the `espeakbridge` `ImportError` facilitated a quick grasp of the core build challenges.
+*   **Conceptual clarity of CMake merge**: The strategy of using conditional `if(PLATFORM)` blocks for unifying the build system was a clear and effective path forward.
+
+### Key Tools and Strategies:
+
+*   **`run_shell_command` with `sed`**: This proved to be an invaluable tool for robust text manipulation, especially for multi-line replacements and deletions where the `replace` tool struggled. Its flexibility and power were critical in overcoming previous roadblocks.
+*   **`read_file`**: Essential for continuously verifying changes and understanding the exact state of the document during iterative modifications.
+*   **`git status` and `git diff`**: Crucial for tracking changes, reviewing modifications, and ensuring repository integrity throughout the development process.
+*   **User feedback**: Direct and clear feedback from the user was the most critical factor in guiding the development process, correcting mistakes, and ensuring the final outcome met expectations. This iterative feedback loop is vital for effective collaboration.
+*   **`GEMINI.md` as a knowledge base**: The detailed historical context and ongoing documentation within `GEMINI.md` provided a strong foundation for understanding project specifics and past solutions.
