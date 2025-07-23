@@ -7,18 +7,17 @@ from pathlib import Path
 
 # Assuming a small test voice model exists in the tests directory
 # FYI: Downloaded voice models are typically located in ~/.cache/piper/
-TEST_VOICE_MODEL_PATH = Path(__file__).parent / "test_voice.onnx"
-TEST_VOICE_CONFIG_PATH = Path(__file__).parent / "test_voice.onnx.json"
-
-@pytest.mark.skipif(not TEST_VOICE_MODEL_PATH.exists() or not TEST_VOICE_CONFIG_PATH.exists(),
-                    reason="Test voice model or config not found. Skipping API synthesis test.")
 def test_api_synthesis():
+    """
+    def test_api_synthesis():
     """
     Tests that the Piper Python API can be imported and used for speech synthesis.
     """
     try:
-        # Load the voice model
-        voice = PiperVoice.load(TEST_VOICE_MODEL_PATH, TEST_VOICE_CONFIG_PATH)
+        # Load a common voice model from the default cache location
+        # For this test to pass, the 'en_US-lessac-medium' voice model must be downloaded
+        # to ~/.cache/piper/ using 'python3 -m piper.download_voices en_US-lessac-medium'
+        voice = PiperVoice.load_by_name("en_US-lessac-medium")
         assert voice is not None, "Failed to load PiperVoice model"
 
         # Synthesize a simple text
