@@ -1,6 +1,5 @@
 # Piper TTS (Termux Fork) Build Guide
 
-![Build Architecture](Architecture_materials/Mermaid_Piper_02.png)
 
 Piper is a high-quality, open-source text-to-speech (TTS) system that runs entirely on your local device. It's designed for performance and privacy, making it an excellent choice for applications requiring voice output without relying on cloud services.
 
@@ -134,6 +133,8 @@ The `piper` command-line interface and Python API can be configured with the fol
 For detailed instructions on building from source, setting up a development environment, or troubleshooting the build process, please refer to our comprehensive guide:
 
 *   **[📄 docs/BUILDING.md](docs/BUILDING.md)**
+
+![Build Architecture](Architecture_materials/Mermaid_Piper_02.png)
 
 This document provides a deep dive into the build architecture, including the automated `CMake` process and manual verification steps.
  
