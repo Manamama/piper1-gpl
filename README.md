@@ -8,7 +8,11 @@ This fork is specifically optimized to ensure a smooth and reliable build experi
 
 Update 1: 
 
-95% of the work has been done (80 percent thereof by https://github.com/google-gemini/gemini-cli/, granted) and we are tying up the wrapping of our bespoke `CmakeList.txt` into its original by now. The code compiles as such. 
+95% of the files work has been done (80 percent thereof by https://github.com/google-gemini/gemini-cli/, granted) and we are tying up the wrapping of our bespoke `CmakeList.txt` into its original by now. The code compiles as such. 
+
+Update 2: 
+
+100 percent done, including the pesky CmakeList.txt, just 10 minutes later. Close to magic... 
 
 
 ## 🚀 Quick Start (Recommended Method)
