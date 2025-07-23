@@ -15,7 +15,9 @@ def test_api_synthesis():
         # Load a common voice model from the default cache location
         # For this test to pass, the 'en_US-lessac-medium' voice model must be downloaded
         # to ~/.cache/piper/ using 'python3 -m piper.download_voices en_US-lessac-medium'
-        voice = PiperVoice.load_by_name("en_US-lessac-medium")
+        model_path = Path.home() / ".cache" / "piper" / "en_US-lessac-medium.onnx"
+        config_path = Path.home() / ".cache" / "piper" / "en_US-lessac-medium.onnx.json"
+        voice = PiperVoice.load(model_path, config_path)
         assert voice is not None, "Failed to load PiperVoice model"
 
         # Synthesize a simple text

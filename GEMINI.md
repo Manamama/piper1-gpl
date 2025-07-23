@@ -159,18 +159,11 @@ This section summarizes key insights and practical takeaways from the recent dev
 
 
 
-## Suspected Regression in `voice.py`
+## ONNX Model Path Bug Resolved
 
-A potential regression has been noted in `src/piper/voice.py`. Specifically, the line `espeak_data_dir=Path(espeak_data_dir)` around line 134 is suspected to have been modified incorrectly. A `git diff` on this file is required to confirm the changes.
+The runtime error related to the `.onnx.onnx` file path has been resolved. The issue stemmed from a semantic mismatch between `src/piper/__main__.py` and `src/piper/voice.py` regarding how voice model paths were handled. `__main__.py` was passing a full file path to `voice.py`'s `load_by_name` method, which expected a simple voice name and then re-appended the `.onnx` extension, leading to the duplication.
 
-## ONNX Model Path Bug
+**Resolution:** The bug was resolved by reverting both `src/piper/__main__.py` and `src/piper/voice.py` to their respective `upstream/main` versions. This removed the problematic `load_by_name` method from `voice.py` and restored `__main__.py`'s original logic for handling model paths directly.
 
-A runtime error has been identified, exemplified by the code attempting to access an incorrect file path with a duplicate extension: `/data/data/com.termux/files/home/.cache/piper/en_US-libritts-high.onnx.onnx`.
-
-**Core Issue:** The user has clarified that this is a **code logic error**, not a filesystem or data error. The problem lies in the "map" (the code that generates the path), not the "territory" (the actual files). My debugging should focus exclusively on the code.
-
-**Action Plan:**
-1.  Investigate the file path construction logic in `src/piper/voice.py`.
-2.  This is the primary suspect for the double `.onnx` extension issue.
-3.  Do not attempt to solve this by renaming files or altering the data in `~/.cache/piper/`. 
+**Lessons Learned:** This particular bug proved challenging and time-consuming to diagnose and fix due to several factors, including initial misinterpretations of the problem's scope and the impact of local development environment nuances (e.g., `pip install -e`). A more strategic approach, focusing on understanding the intended API contracts and the propagation of changes, would have led to a quicker resolution. Further lessons learned regarding debugging strategies and AI-human collaboration will be documented soon. 
 
