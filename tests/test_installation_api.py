@@ -6,6 +6,7 @@ from piper import PiperVoice, SynthesisConfig
 from pathlib import Path
 
 # Assuming a small test voice model exists in the tests directory
+# FYI: Downloaded voice models are typically located in ~/.cache/piper/
 TEST_VOICE_MODEL_PATH = Path(__file__).parent / "test_voice.onnx"
 TEST_VOICE_CONFIG_PATH = Path(__file__).parent / "test_voice.onnx.json"
 

@@ -10,6 +10,7 @@ def test_cli_synthesis():
         # Assuming a default voice model is available or can be downloaded
         # For a real test, you might want to ensure a specific voice is present
         # or download one as part of the test setup.
+        # FYI: Downloaded voice models are typically located in ~/.cache/piper/
         command = [
             "python3",
             "-m",
