@@ -149,9 +149,6 @@ This section summarizes key insights and practical takeaways from the recent dev
 ### Key Tools and Strategies:
 
 *   **`run_shell_command` with `sed`**: This proved to be an invaluable tool for robust text manipulation, especially for multi-line replacements and deletions where the `replace` tool struggled. Its flexibility and power were critical in overcoming previous roadblocks.
-*   **`read_file`**: Essential for continuously verifying changes and understanding the exact state of the document during iterative modifications.
-*   **`git status` and `git diff`**: Crucial for tracking changes, reviewing modifications, and ensuring repository integrity throughout the development process.
-*   **User feedback**: Direct and clear feedback from the user was the most critical factor in guiding the development process, correcting mistakes, and ensuring the final outcome met expectations. This iterative feedback loop is vital for effective collaboration.
 *   **`GEMINI.md` as a knowledge base**: The detailed historical context and ongoing documentation within `GEMINI.md` provided a strong foundation for understanding project specifics and past solutions.
 
 
@@ -178,5 +175,9 @@ The `test_installation_cli.py` continues to fail with a `TypeError` related to `
 4.  **Modification in `test_installation_cli.py` (Attempt 4):** Added `env={"HOME": str(Path.home())}` to the `subprocess.run` call.
     *   **Reasoning:** This was an attempt to ensure `Path.home()` resolved correctly within the isolated `subprocess` environment, as `NoneType` errors can sometimes stem from environment variable issues.
     *   **Outcome:** The `TypeError` persisted.
+
+
+These changes were then reverted. 
+
 
 The root cause of `espeak_data_dir` being `None` within the `piper` subprocess remains elusive, despite these attempts to correctly pass the `--data-dir` argument and ensure `Path.home()` resolution. The traceback consistently points to `espeak_data_dir=Path(espeak_data_dir)` in `piper/voice.py`, line 134, where `espeak_data_dir` is `None`."
