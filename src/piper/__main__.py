@@ -85,7 +85,7 @@ def main() -> None:
         "--data-dir",
         "--data_dir",
         action="append",
-        default=[str(Path.cwd())],
+        default=[str(Path.home() / ".cache" / "piper")],
         help="Data directory to check for voice models (default: current directory)",
     )
     #
@@ -123,7 +123,7 @@ def main() -> None:
 
     # Load voice
     _LOGGER.debug("Loading voice: '%s'", args.model)
-    voice = PiperVoice.load_by_name(args.model, use_cuda=args.cuda)
+    voice = PiperVoice.load_by_name(args.model, use_cuda=args.cuda, espeak_data_dir=None)
     syn_config = SynthesisConfig(
         speaker_id=args.speaker,
         length_scale=args.length_scale,

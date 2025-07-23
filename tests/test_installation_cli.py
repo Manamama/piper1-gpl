@@ -1,6 +1,8 @@
 
+import os
 import subprocess
 import pytest
+from pathlib import Path
 
 def test_cli_synthesis():
     """
@@ -18,6 +20,7 @@ def test_cli_synthesis():
             "--model", "en_US-lessac-medium", # Using a common English model
             "--output-raw",
             "-",
+            "--data-dir", str(Path.home() / ".cache" / "piper"),
             "--",
             "Hello, this is a CLI test."
         ]
