@@ -21,12 +21,12 @@ def test_api_synthesis():
         # Synthesize a simple text
         text = "Hello, this is a test."
         config = SynthesisConfig()
-        audio_chunks = list(voice.synthesize(config))
+        audio_chunks = list(voice.synthesize(text, syn_config=config))
 
         # Verify that audio chunks are generated
         assert len(audio_chunks) > 0, "No audio chunks generated"
-        assert all(isinstance(chunk.samples, bytes) for chunk in audio_chunks), "Audio chunks are not bytes"
-        assert all(len(chunk.samples) > 0 for chunk in audio_chunks), "Empty audio chunks generated"
+        assert all(isinstance(chunk.audio_int16_bytes, bytes) for chunk in audio_chunks), "Audio chunks are not bytes"
+        assert all(len(chunk.audio_int16_bytes) > 0 for chunk in audio_chunks), "Empty audio chunks generated"
 
     except Exception as e:
         pytest.fail(f"API synthesis test failed: {e}")
