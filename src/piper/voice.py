@@ -134,34 +134,6 @@ class PiperVoice:
             espeak_data_dir=Path(espeak_data_dir),
         )
 
-    @staticmethod
-    def load_by_name(
-        voice_name: str,
-        use_cuda: bool = False,
-        espeak_data_dir: Union[str, Path] = ESPEAK_DATA_DIR,
-    ) -> "PiperVoice":
-        """
-        Load an ONNX model and config by voice name.
-
-        :param voice_name: Name of voice like 'en_US-lessac-medium'.
-        :param use_cuda: True if CUDA (GPU) should be used instead of CPU.
-        :param espeak_data_dir: Path to espeak-ng data dir (defaults to internal data).
-        :return: Voice object.
-        """
-        # Default voice cache directory
-        voice_cache_dir = Path.home() / ".cache" / "piper"
-
-        model_path = voice_cache_dir / f"{voice_name}.onnx"
-        config_path = voice_cache_dir / f"{voice_name}.onnx.json"
-
-        if not model_path.is_file():
-            raise ValueError(f"Unable to find voice model: {model_path} (use piper.download_voices)")
-
-        if not config_path.is_file():
-            raise ValueError(f"Unable to find voice config: {config_path} (use piper.download_voices)")
-
-        return PiperVoice.load(model_path, config_path, use_cuda, espeak_data_dir)
-
     def phonemize(self, text: str) -> list[list[str]]:
         """
         Text to phonemes grouped by sentence.
