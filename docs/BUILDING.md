@@ -1,7 +1,5 @@
 # 🛠️ Building Piper-TTS: A Visual Guide
 
-![Build Architecture](../Architecture_materials/Mermaid_Piper_02.png)
-
 This guide provides a detailed look at building the `piper-tts` Python module, which directly embeds [espeak-ng][].
 
 You will need the following system packages installed (`apt-get`):
@@ -82,7 +80,14 @@ This approach leverages `scikit-build` to integrate Python's packaging with a so
     *   **Handles Data Installation**: The `espeak-ng` external project is configured to install its necessary data files (e.g., `espeak-ng-data`) as part of its own build. The main `piper` build then declares a dependency on this external project, which ensures all of `espeak-ng`'s components, including its data, are fully built and installed *before* the main Piper library begins to compile. This resolves a critical build-order dependency.
     *   **Builds Piper**: Finally, CMake compiles the Piper library itself, linking it against the private, locally-built `espeak-ng` and the system's `onnxruntime`.
 
+![Build Architecture](../Architecture_materials/Mermaid_Piper_02.png)
+
 This entire process is designed to be automatic. Once you start the `pip install` command, you can step away while it completes.
+
+
+
+
+
 
 ### Plan B: Manual Verification and Troubleshooting
 
@@ -143,6 +148,11 @@ If the automated build (Plan A) fails, this guide will help you diagnose the pro
 *   Crucially, setting the `sources` argument for `espeakbridge_extension` to use `os.path.relpath(os.path.join(os.path.dirname(__file__), "src", "piper", "espeakbridge.c"))`. This ensures the path is always correctly interpreted as relative to `setup.py`, even in isolated build environments.
 *   Using `sys.prefix` to dynamically determine the `espeak-ng` include and library paths for portability (e.g., `str(Path(sys.prefix) / "include" / "espeak-ng")`).
 *   Adding `espeakbridge_extension` to the `ext_modules` list in the `setup()` call.
+
+
+### Autotest:
+
+Run `pytest` simply. 
 
 
 ### What This Means for the User (Overall):
