@@ -9,8 +9,6 @@ from pathlib import Path
 # FYI: Downloaded voice models are typically located in ~/.cache/piper/
 def test_api_synthesis():
     """
-    def test_api_synthesis():
-    """
     Tests that the Piper Python API can be imported and used for speech synthesis.
     """
     try:
@@ -22,7 +20,7 @@ def test_api_synthesis():
 
         # Synthesize a simple text
         text = "Hello, this is a test."
-        config = SynthesisConfig(text=text)
+        config = SynthesisConfig()
         audio_chunks = list(voice.synthesize(config))
 
         # Verify that audio chunks are generated
