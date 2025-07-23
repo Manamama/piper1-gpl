@@ -121,7 +121,7 @@ elseif(ANDROID)
     # --- Build espeak-ng from source ---
     include(ExternalProject)
 
-    set(ESPEAK_NG_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third-party/espeak-ng")
+    set(ESPEAK_NG_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/espeak-ng")
     set(ESPEAK_NG_INSTALL_DIR "${CMAKE_BINARY_DIR}/espeak-ng-install")
     set(ESPEAKNG_LIB "${ESPEAK_NG_INSTALL_DIR}/lib/libespeak-ng.so")
     set(ESPEAKNG_INCLUDE_DIR "${ESPEAK_NG_INSTALL_DIR}/include")
