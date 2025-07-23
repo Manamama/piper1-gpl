@@ -84,6 +84,11 @@ This approach leverages `scikit-build` to integrate Python's packaging with a so
 
 This entire process is designed to be automatic. Once you start the `pip install` command, you can step away while it completes.
 
+
+
+
+
+
 ### Plan B: Manual Verification and Troubleshooting
 
 If the automated build (Plan A) fails, this guide will help you diagnose the problem. The issue is almost always related to system dependencies, network connectivity, or a stale build cache.
