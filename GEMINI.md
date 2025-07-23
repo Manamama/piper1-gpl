@@ -120,3 +120,13 @@ The `README.md` file has been significantly updated and simplified to reflect th
 *   **Refined "Environment Variables" section**: This section has been updated to reflect the relevant environment variables for the Python API and CLI, removing outdated information.
 *   **Removal of the Debian package section**: The section detailing the `piper-tts-cli` deb package has been removed as it is no longer the primary or recommended installation method.
 *   **Retention of "Building from Source & Development"**: This section remains and now explicitly points to `docs/BUILDING.md` for advanced users who need detailed build information or wish to contribute to development.
+
+## CMakeLists.txt Merge and Simplification
+
+The project's `CMakeLists.txt` has been refactored to merge platform-specific build logic into a single, unified file. This improves maintainability and simplifies the build process across different operating systems. Key changes include:
+
+*   **Consolidated Build Logic**: The separate build configurations for Windows, Android (Termux), and generic Unix (Linux/macOS) have been merged into one `CMakeLists.txt` using conditional `if(WIN32)`, `elseif(ANDROID)`, and `elseif(UNIX)` blocks.
+*   **Platform-Specific External Project Handling**: The `espeak-ng` external project is now built with parameters tailored to each platform (e.g., static libraries for Windows/Unix, shared libraries for Android).
+*   **Unified `espeakbridge` Definition**: The `espeakbridge` Python C extension is defined once, with its linking and properties adjusted based on the target platform.
+*   **Automated Dependency Management for Android**: The Android-specific section retains the `pkg` calls for automatic installation of Termux prerequisites and the discovery of the system's `onnxruntime` library.
+*   **Renamed Original CMakeLists**: The original `CMakeLists.txt` (version 1.3.0) has been renamed to `CMakeLists.txt.bak` for historical reference.
