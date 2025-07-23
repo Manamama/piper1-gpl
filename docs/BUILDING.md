@@ -150,6 +150,11 @@ If the automated build (Plan A) fails, this guide will help you diagnose the pro
 *   Adding `espeakbridge_extension` to the `ext_modules` list in the `setup()` call.
 
 
+### Autotest:
+
+Run `pytest` simply. 
+
+
 ### What This Means for the User (Overall):
 
 This fork aims to provide a significantly smoother experience for Termux users building Piper. The primary goal (Plan A) is to automate the complex native dependency handling, transforming the installation into a "go for coffee" experience. Even if Plan A requires troubleshooting, Plan B provides clear manual steps to resolve common issues.
