@@ -85,7 +85,7 @@ def main() -> None:
         "--data-dir",
         "--data_dir",
         action="append",
-        default=[str(Path.home() / ".cache" / "piper")],
+        default=[str(Path.cwd())],
         help="Data directory to check for voice models (default: current directory)",
     )
     #
@@ -121,9 +121,25 @@ def main() -> None:
                 if line:
                     yield line
 
+    model_path = Path(args.model)
+    if not model_path.exists():
+        # Look in data directories
+        voice_name = args.model
+        for data_dir in args.data_dir:
+            maybe_model_path = Path(data_dir) / f"{voice_name}.onnx"
+            _LOGGER.debug("Checking '%s'", maybe_model_path)
+            if maybe_model_path.exists():
+                model_path = maybe_model_path
+                break
+
+    if not model_path.exists():
+        raise ValueError(
+            f"Unable to find voice: {model_path} (use piper.download_voices)"
+        )
+
     # Load voice
-    _LOGGER.debug("Loading voice: '%s'", args.model)
-    voice = PiperVoice.load_by_name(args.model, use_cuda=args.cuda, espeak_data_dir=None)
+    _LOGGER.debug("Loading voice: '%s'", model_path)
+    voice = PiperVoice.load(model_path, use_cuda=args.cuda)
     syn_config = SynthesisConfig(
         speaker_id=args.speaker,
         length_scale=args.length_scale,
