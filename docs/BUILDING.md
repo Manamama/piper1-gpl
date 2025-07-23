@@ -1,7 +1,5 @@
 # 🛠️ Building Piper-TTS: A Visual Guide
 
-![Build Architecture](../Architecture_materials/Mermaid_Piper_02.png)
-
 This guide provides a detailed look at building the `piper-tts` Python module, which directly embeds [espeak-ng][].
 
 You will need the following system packages installed (`apt-get`):
@@ -81,6 +79,8 @@ This approach leverages `scikit-build` to integrate Python's packaging with a so
     *   **Clones and Builds a Private `espeak-ng`**: To guarantee ABI compatibility and avoid conflicts with system-wide versions, the build process uses CMake's `ExternalProject_Add` command. This clones the `espeak-ng` repository and compiles it from source. This local build is used exclusively by Piper.
     *   **Handles Data Installation**: The `espeak-ng` external project is configured to install its necessary data files (e.g., `espeak-ng-data`) as part of its own build. The main `piper` build then declares a dependency on this external project, which ensures all of `espeak-ng`'s components, including its data, are fully built and installed *before* the main Piper library begins to compile. This resolves a critical build-order dependency.
     *   **Builds Piper**: Finally, CMake compiles the Piper library itself, linking it against the private, locally-built `espeak-ng` and the system's `onnxruntime`.
+
+![Build Architecture](../Architecture_materials/Mermaid_Piper_02.png)
 
 This entire process is designed to be automatic. Once you start the `pip install` command, you can step away while it completes.
 
