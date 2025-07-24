@@ -1,23 +1,24 @@
-# Piper TTS (Termux Fork) Build Guide
+![Piper](etc/logo.png)
 
+A fast and local neural text-to-speech engine that embeds [espeak-ng][] for phonemization.
 
-Piper is a high-quality, open-source text-to-speech (TTS) system that runs entirely on your local device. It's designed for performance and privacy, making it an excellent choice for applications requiring voice output without relying on cloud services.
+Install with:
 
-This fork is specifically optimized to ensure a smooth and reliable build experience on Termux (Android).
+``` sh
+pip install piper-tts
+```
 
-Update 1: 
+* 🎧 [Samples][samples]
+* 💡 [Demo][demo]
+* 🗣️ [Voices][voices]
+* 🖥️ [Command-line interface][cli]
+* 🌐 [Web server][api-http]
+* 🐍 [Python API][api-python]
+* 🔧 [C/C++ API][libpiper]
+* 🏋️ [Training new voices][training]
+* 🛠️ [Building manually][building]
 
-95% of the files work has been done (80 percent thereof by https://github.com/google-gemini/gemini-cli/, granted) and we are wrapping up our bespoke `CmakeList.txt` into its original by now. The code compiles as such. 
-
-Update 2: 
-
-100 percent done, including the pesky CmakeList.txt, just 10 minutes later. Close to magic... 
-
-Update 3:
-
-We have just learnt what `pytest` may do, doing just that... Testing still fails, only the last 🪜, see https://github.com/Manamama/piper1-gpl/blob/termux-build-improvements/GEMINI.md
-
-
+---
 
 ## 🚀 Quick Start (Recommended Method)
 
@@ -39,27 +40,30 @@ pip install .
 
 This single command handles the download, compilation, and installation of all dependencies. For detailed build information, see the [docs/BUILDING.md](docs/BUILDING.md) file.
 
----
-
 **The original, manual build guide and usage examples are preserved below for reference.**
 
 ---
 
+People/projects using Piper:
 
+* [Home Assistant](https://github.com/home-assistant/addons/blob/master/piper/README.md)
+* [NVDA - NonVisual Desktop Access](https://www.nvaccess.org/post/in-process-8th-may-2023/#voices)
+* [Image Captioning for the Visually Impaired and Blind: A Recipe for Low-Resource Languages](https://www.techrxiv.org/articles/preprint/Image_Captioning_for_the_Visually_Impaired_and_Blind_A_Recipe_for_Low-Resource_Languages/22133894)
+* [Video tutorial by Thorsten Müller](https://youtu.be/rjq5eZoWWSo)
+* [Open Voice Operating System](https://github.com/OpenVoiceOS/ovos-tts-plugin-piper)
+* [JetsonGPT](https://github.com/shahizat/jetsonGPT)
+* [LocalAI](https://github.com/go-skynet/LocalAI)
+* [Lernstick EDU / EXAM: reading clipboard content aloud with language detection](https://lernstick.ch/)
+* [Natural Speech - A plugin for Runelite, an OSRS Client](https://github.com/phyce/rl-natural-speech)
+* [mintPiper](https://github.com/evuraan/mintPiper)
+* [Vim-Piper](https://github.com/wolandark/vim-piper)
+* [POTaTOS](https://www.youtube.com/watch?v=Dz95q6XYjwY)
+* [Narration Studio](https://github.com/phyce/Narration-Studio)
+* [Basic TTS](https://basictts.com/) - Simple online text-to-speech converter.
 
-
-
+[![A library from the Open Home Foundation](https://www.openhomefoundation.org/badges/ohf-library.png)](https://www.openhomefoundation.org/)
 
 ---
-
-
-
-
-
-
----
-
-
 
 ## 🗣️ Usage
 
@@ -142,4 +146,17 @@ For detailed instructions on building from source, setting up a development envi
 ![Build Architecture](Architecture_materials/Mermaid_Piper_02.png)
 
 This document provides a deep dive into the build architecture, including the automated `CMake` process and manual verification steps.
+ 
+
+<!-- Links -->
+[espeak-ng]: https://github.com/espeak-ng/espeak-ng
+[cli]: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/CLI.md
+[api-http]: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/API_HTTP.md
+[api-python]: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/API_PYTHON.md
+[training]: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/TRAINING.md
+[building]: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/BUILDING.md
+[voices]: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/VOICES.md
+[samples]: https://rhasspy.github.io/piper-samples
+[demo]: https://rhasspy.github.io/piper-samples/demo.html
+[libpiper]: https://github.com/OHF-Voice/piper1-gpl/tree/main/libpiper
  

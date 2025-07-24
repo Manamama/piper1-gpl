@@ -165,5 +165,51 @@ The runtime error related to the `.onnx.onnx` file path has been resolved. The i
 
 **Resolution:** The bug was resolved by reverting both `src/piper/__main__.py` and `src/piper/voice.py` to their respective `upstream/main` versions. This removed the problematic `load_by_name` method from `voice.py` and restored `__main__.py`'s original logic for handling model paths directly.
 
-**Lessons Learned:** This particular bug proved challenging and time-consuming to diagnose and fix due to several factors, including initial misinterpretations of the problem's scope and the impact of local development environment nuances (e.g., `pip install -e`). A more strategic approach, focusing on understanding the intended API contracts and the propagation of changes, would have led to a quicker resolution. Further lessons learned regarding debugging strategies and AI-human collaboration will be documented soon. 
+**Lessons Learned:** This particular bug proved challenging and time-consuming to diagnose and fix due to several factors, including initial misinterpretations of the problem's scope and the impact of local development environment nuances (e.g., `pip install -e`). A more strategic approach, focusing on understanding the intended API contracts and the propagation of changes, would have led to a quicker resolution. Further lessons learned regarding debugging strategies and AI-human collaboration will be documented soon.
 
+## Plan for `feat/termux-build-pr` Branch Preparation
+
+This section outlines the detailed steps for preparing the `feat/termux-build-pr` branch for the upstream Pull Request, ensuring only relevant changes are included.
+
+1.  **Switch to `feat/termux-build-pr`:** Ensure we are on the correct branch.
+    `git checkout feat/termux-build-pr`
+2.  **Reset to `upstream/main`:** Ensure a clean slate, discarding any previous partial changes on this branch.
+    `git reset --hard upstream/main`
+3.  **Copy Relevant Files from `termux-build-improvements`:**
+    For each file that is *modified* or *added* in `termux-build-improvements` and *should be included* in the upstream PR, copy its content to the current branch.
+    *   **Added Files (from `termux-build-improvements`):**
+        *   `Architecture_materials/Mermaid_02.md`
+        *   `Architecture_materials/Mermaid_Piper_02.png`
+        *   `libpiper/clean_text.cpp`
+        *   `libpiper/piper.cpp`
+        *   `libpiper/say.cpp`
+        *   `pytest.ini`
+        *   `src/piper/include/piper.h`
+        *   `tests/test_installation_api.py`
+        *   `tests/test_installation_cli.py`
+    *   **Modified Files (from `termux-build-improvements`):**
+        *   `.gitignore`
+        *   `CHANGELOG.md`
+        *   `CMakeLists.txt`
+        *   `README.md`
+        *   `docs/BUILDING.md`
+        *   `libpiper/CMakeLists.txt`
+        *   `pyproject.toml`
+        *   `setup.py`
+        *   `src/piper/phonemize_espeak.py`
+4.  **Handle Deleted Files:** Remove `build_monotonic_align.sh` as it was deleted in `termux-build-improvements` and should be deleted in the upstream PR.
+    `rm build_monotonic_align.sh`
+5.  **Stage All Changes:** Stage all the copied and deleted files.
+    `git add .`
+6.  **Commit Changes:** Create a single, comprehensive commit with the agreed-upon message.
+    `git commit -m "feat: Termux build improvements and unified CMakeLists.txt
+
+..."`
+7.  **Verify Diff:** Confirm that the staged changes accurately reflect only the intended PR content.
+    `git diff upstream/main --name-status`
+8.  **Run Tests:** Install the package and run the full test suite to ensure everything works as expected on this PR branch.
+    `pip install .`
+    `pytest`
+9.  **Push to Fork:** Push the `feat/termux-build-pr` branch to the user's fork.
+    `git push origin feat/termux-build-pr`
+10. **Create Pull Request:** Use `gh pr create` to open the PR to `OHF-Voice/piper1-gpl:main`.
