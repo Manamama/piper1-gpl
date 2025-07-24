@@ -2,6 +2,8 @@
 
 A fast and local neural text-to-speech engine that embeds [espeak-ng][] for phonemization.
 
+This fork extends Piper's reach by providing a streamlined, robust build process specifically for Termux (Android), making it easily installable via `pip install .` and thus more universally accessible across various platforms.
+
 Install with:
 
 ``` sh
