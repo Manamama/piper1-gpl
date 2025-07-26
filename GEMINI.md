@@ -27,6 +27,7 @@ The following plan is currently being executed to prepare the `feat/termux-build
     *   **Added Files (from `termux-build-improvements`):**
         *   `Architecture_materials/Mermaid_02.md`
         *   `Architecture_materials/Mermaid_Piper_02.png`
+        *   `build_monotonic_align.sh`
         *   `libpiper/clean_text.cpp`
         *   `libpiper/piper.cpp`
         *   `libpiper/say.cpp`
@@ -44,20 +45,22 @@ The following plan is currently being executed to prepare the `feat/termux-build
         *   `pyproject.toml`
         *   `setup.py`
         *   `src/piper/phonemize_espeak.py`
-4.  **Stage All Changes:** Stage all the copied and deleted files.
+4.  **Handle Deleted Files:** Ensure that files deleted in `termux-build-improvements` are also deleted in the PR branch. For example, `build_monotonic_align.sh` was deleted in `termux-build-improvements` and should not be present in the upstream PR.
+    `rm build_monotonic_align.sh`
+5.  **Stage All Changes:** Stage all the copied and deleted files.
     `git add .`
-5.  **Commit Changes:** Create a single, comprehensive commit with the agreed-upon message.
+6.  **Commit Changes:** Create a single, comprehensive commit with the agreed-upon message.
     `git commit -m "feat: Termux build improvements and unified CMakeLists.txt
 
 ..."`
-6.  **Verify Diff:** Confirm that the staged changes accurately reflect only the intended PR content.
+7.  **Verify Diff:** Confirm that the staged changes accurately reflect only the intended PR content.
     `git diff upstream/main --name-status`
-7.  **Run Tests:** Install the package and run the full test suite to ensure everything works as expected on this PR branch.
+8.  **Run Tests:** Install the package and run the full test suite to ensure everything works as expected on this PR branch.
     `pip install .`
     `pytest`
-8.  **Push to Fork:** Push the `feat/termux-build-pr` branch to the user's fork.
+9.  **Push to Fork:** Push the `feat/termux-build-pr` branch to the user's fork.
     `git push origin feat/termux-build-pr`
-9.  **Create Pull Request:** Use `gh pr create` to open the PR to `OHF-Voice/piper1-gpl:main`.
+10. **Create Pull Request:** Use `gh pr create` to open the PR to `OHF-Voice/piper1-gpl:main`.
 
 ## Repository Relationships (July 19, 2025)
 
