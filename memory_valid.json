@@ -1,0 +1,186 @@
+[
+  {
+    "type": "entity",
+    "name": "John Doe",
+    "entityType": "Person",
+    "observations": [
+      "Initial observation"
+    ]
+  },
+  {
+    "type": "entity",
+    "name": "Piper TTS",
+    "observations": [
+      "A fast, local neural text to speech engine."
+    ],
+    "entityType": "Project"
+  },
+  {
+    "type": "entity",
+    "name": "pip install .",
+    "entityType": "Build Process",
+    "observations": [
+      "The user-facing command to trigger the automated build process."
+    ]
+  },
+  {
+    "type": "entity",
+    "observations": [
+      "Used alongside CMake to build the Python module."
+    ],
+    "name": "scikit-build-core",
+    "entityType": "Build Tool"
+  },
+  {
+    "type": "entity",
+    "observations": [
+      "The core build system used to compile native code."
+    ],
+    "name": "CMake",
+    "entityType": "Build Tool"
+  },
+  {
+    "type": "entity",
+    "entityType": "Configuration File",
+    "observations": [
+      "Automates the handling of native dependencies in Termux.",
+      "Clones and builds espeak-ng from source.",
+      "Manages the installation of system packages like python-onnxruntime.",
+      "Copies espeak-ng-data to the final package location."
+    ],
+    "name": "CMakeLists.txt"
+  },
+  {
+    "type": "entity",
+    "name": "espeak-ng",
+    "observations": [
+      "A text-to-speech synthesizer used for phonemization.",
+      "It is cloned and compiled from source during the build.",
+      "Provides the crucial `espeak_TextToPhonemesWithTerminator` function."
+    ],
+    "entityType": "Dependency"
+  },
+  {
+    "type": "entity",
+    "observations": [
+      "The machine learning model runtime.",
+      "Handled by installing the `python-onnxruntime` package in Termux."
+    ],
+    "entityType": "Dependency",
+    "name": "ONNX Runtime"
+  },
+  {
+    "type": "entity",
+    "entityType": "Component",
+    "observations": [
+      "A C extension that acts as a bridge between Python and espeak-ng.",
+      "Compiled into `piper.espeakbridge`."
+    ],
+    "name": "espeakbridge.c"
+  },
+  {
+    "type": "entity",
+    "entityType": "Component",
+    "observations": [
+      "The mechanism in setup.py used to define and compile the `espeakbridge.c` C extension."
+    ],
+    "name": "setuptools.Extension"
+  },
+  {
+    "type": "entity",
+    "observations": [
+      "The target Android environment for which the automated build is designed."
+    ],
+    "name": "Termux",
+    "entityType": "Environment"
+  },
+  {
+    "type": "entity",
+    "entityType": "Component",
+    "observations": [
+      "Data files required by espeak-ng.",
+      "Copied into the final package location via a PRE_BUILD command in CMake."
+    ],
+    "name": "espeak-ng-data"
+  },
+  {
+    "type": "entity",
+    "observations": [
+      "The person initiating the build process."
+    ],
+    "name": "User",
+    "entityType": "Actor"
+  },
+  {
+    "type": "relation",
+    "relationType": "INITIATES",
+    "to": "pip install .",
+    "from": "User"
+  },
+  {
+    "type": "relation",
+    "from": "pip install .",
+    "to": "CMake",
+    "relationType": "TRIGGERS"
+  },
+  {
+    "type": "relation",
+    "to": "CMakeLists.txt",
+    "relationType": "IS_CONFIGURED_BY",
+    "from": "CMake"
+  },
+  {
+    "type": "relation",
+    "from": "CMakeLists.txt",
+    "to": "espeak-ng",
+    "relationType": "MANAGES_DEPENDENCY"
+  },
+  {
+    "type": "relation",
+    "from": "CMakeLists.txt",
+    "relationType": "MANAGES_DEPENDENCY",
+    "to": "ONNX Runtime"
+  },
+  {
+    "type": "relation",
+    "to": "espeak-ng-data",
+    "from": "CMakeLists.txt",
+    "relationType": "COPIES"
+  },
+  {
+    "type": "relation",
+    "relationType": "COMPILES",
+    "from": "CMake",
+    "to": "espeakbridge.c"
+  },
+  {
+    "type": "relation",
+    "relationType": "IS_DEFINED_AS_A",
+    "from": "espeakbridge.c",
+    "to": "setuptools.Extension"
+  },
+  {
+    "type": "relation",
+    "relationType": "BRIDGES",
+    "from": "espeakbridge.c",
+    "to": "espeak-ng"
+  },
+  {
+    "type": "relation",
+    "relationType": "ENABLES",
+    "from": "espeakbridge.c",
+    "to": "Piper TTS"
+  },
+  {
+    "type": "relation",
+    "to": "Termux",
+    "relationType": "IS_BUILT_IN",
+    "from": "Piper TTS"
+  },
+  {
+    "type": "relation",
+    "relationType": "USES_TOOL",
+    "from": "Piper TTS",
+    "to": "scikit-build-core"
+  }
+]

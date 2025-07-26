@@ -1,0 +1,26 @@
+@startuml
+object "Piper TTS" as PiperTTS
+object "pip install ." as pipinstall
+object "scikit-build-core" as scikitbuildcore
+object "CMake" as CMake
+object "CMakeLists.txt" as CMakeListstxt
+object "espeak-ng" as espeakng
+object "ONNX Runtime" as ONNXRuntime
+object "espeakbridge.c" as espeakbridgec
+object "setuptools.Extension" as setuptoolsExtension
+object "Termux" as Termux
+object "espeak-ng-data" as espeakngdata
+object "User" as User
+User --> pipinstall : INITIATES
+pipinstall --> CMake : TRIGGERS
+CMake --> CMakeListstxt : IS_CONFIGURED_BY
+CMakeListstxt --> espeakng : MANAGES_DEPENDENCY
+CMakeListstxt --> ONNXRuntime : MANAGES_DEPENDENCY
+CMakeListstxt --> espeakngdata : COPIES
+CMake --> espeakbridgec : COMPILES
+espeakbridgec --> setuptoolsExtension : IS_DEFINED_AS_A
+espeakbridgec --> espeakng : BRIDGES
+espeakbridgec --> PiperTTS : ENABLES
+PiperTTS --> Termux : IS_BUILT_IN
+PiperTTS --> scikitbuildcore : USES_TOOL
+@enduml
