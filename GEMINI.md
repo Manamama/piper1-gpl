@@ -1,11 +1,13 @@
 All Finished! The Pull Request has been successfully created and submitted.
 
-## Project Status (July 26, 2025)
+## Project Status (July 28, 2025)
 
 This `GEMINI.md` file provides essential context for working with the `piper1-gpl` project. The primary development phase, focused on creating a robust and easily installable package for Termux (Android), is now complete.
 
 **Current Status:**
-The project is now in the final stages of preparing a Pull Request (PR) to merge the `feat/termux-build-pr` branch into the upstream `OHF-Voice/piper1-gpl` repository. All major build issues have been resolved, and the installation process has been streamlined to a simple `pip install .`.
+The Pull Request to merge the `feat/termux-build-pr` branch into the upstream `OHF-Voice/piper1-gpl` repository has been successfully created and submitted. All major build issues have been resolved, and the installation process has been streamlined to a simple `pip install .`.
+
+**Pull Request Location:** [https://github.com/OHF-Voice/piper1-gpl/pull/21](https://github.com/OHF-Voice/piper1-gpl/pull/21)
 
 ### Key Accomplishments
 
@@ -16,7 +18,7 @@ The project is now in the final stages of preparing a Pull Request (PR) to merge
 
 ## PR Preparation Plan
 
-The following plan is currently being executed to prepare the `feat/termux-build-pr` branch for submission.
+The following plan was executed to prepare the `feat/termux-build-pr` branch for submission. These steps are retained for future reference and as a guide for similar PR processes.
 
 **Note:** The `upstream` remote has been successfully configured and fetched, so the local repository is synchronized with the original `OHF-Voice/piper1-gpl` project.
 
@@ -64,7 +66,7 @@ The following plan is currently being executed to prepare the `feat/termux-build
     `git push origin feat/termux-build-pr`
 10. **Create Pull Request:** Use `gh pr create` to open the PR to `OHF-Voice/piper1-gpl:main`.
 
-## Repository Relationships (July 19, 2025)
+## Repository Relationships (July 28, 2025)
 
 This section clarifies the relationships between the various Git repositories encountered during this session to prevent future confusion.
 
