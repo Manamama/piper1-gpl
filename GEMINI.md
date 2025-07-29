@@ -1,11 +1,55 @@
-All Finished! The Pull Request has been successfully created and submitted.
+The Pull Request has been rejected. We are currently strategizing on how to proceed.
 
-## Project Status (July 28, 2025)
+## Project Status (July 29, 2025)
 
-This `GEMINI.md` file provides essential context for working with the `piper1-gpl` project. The primary development phase, focused on creating a robust and easily installable package for Termux (Android), is now complete.
+This `GEMINI.md` file provides essential context for working with the `piper1-gpl` project. The primary development phase, focused on creating a robust and easily installable package for Termux (Android), was completed, but the associated Pull Request was rejected.
 
 **Current Status:**
-The Pull Request to merge the `feat/termux-build-pr` branch into the upstream `OHF-Voice/piper1-gpl` repository has been successfully created and submitted. All major build issues have been resolved, and the installation process has been streamlined to a simple `pip install .`.
+The Pull Request to merge the `feat/termux-build-pr` branch into the upstream `OHF-Voice/piper1-gpl` repository has been rejected. The developer's feedback was: "Thank you for the PR, but there are way too many things being done at once. Please split this PR into multiples with a single, focused change in each so that we can discuss them individually." We are now planning how to break down the changes into smaller, more focused Pull Requests, as per the following strategy:
+
+**Proposed PR Splitting Strategy:**
+
+**PR 1: Universal Build System Refinement & Termux Integration**
+*   **Focus:** This PR will encompass all the core build system changes that make Piper's build more universal and specifically enable the Termux integration. This includes the unified `CMakeLists.txt` files, the `setup.py` modifications that tie into the build system, and the `pyproject.toml` changes. It also includes the `espeakbridge` and `phonemize_espeak.py` changes that are fundamental to the Termux build's dependency handling. The `Architecture_materials` would also fit here as they describe this new build system.
+*   **Files:**
+    *   `CMakeLists.txt` (root)
+    *   `libpiper/CMakeLists.txt`
+    *   `setup.py`
+    *   `pyproject.toml`
+    *   `src/piper/phonemize_espeak.py`
+    *   `src/piper/include/piper.h` (if modified for build system, otherwise it's core API)
+    *   `.gitignore`
+    *   `Architecture_materials/Mermaid_02.md`
+    *   `Architecture_materials/Mermaid_Piper_02.png`
+
+**PR 2: Enhanced CLI Features & Text Processing**
+*   **Focus:** This PR will contain the new user-facing features and improvements to the CLI, including the `say.cpp` and `clean_text.cpp` additions. These are distinct functional enhancements that build upon the underlying `libpiper` and `espeak-ng` integration.
+*   **Files:**
+    *   `libpiper/piper.cpp`
+    *   `libpiper/say.cpp`
+    *   `libpiper/clean_text.cpp`
+
+**PR 3: Installation & CLI Tests**
+*   **Focus:** This PR will introduce the new tests specifically designed to verify the successful installation and basic functionality of the API and CLI. These tests are crucial for validating the changes in PR1 and PR2.
+*   **Files:**
+    *   `pytest.ini`
+    *   `tests/test_installation_api.py`
+    *   `tests/test_installation_cli.py`
+
+**PR 4: Documentation Updates**
+*   **Focus:** This PR will update the `README.md`, `docs/BUILDING.md`, and `CHANGELOG.md` to reflect all the changes introduced in the previous PRs. This should be the last PR, as it summarizes everything.
+*   **Files:**
+    *   `README.md`
+    *   `docs/BUILDING.md`
+    *   `CHANGELOG.md`
+
+**Rationale for this revised splitting:**
+
+*   **Addresses "Too Many Things":** This breaks down the massive original PR into four distinct, yet logically connected, feature sets.
+*   **Maintains Cohesion:** Each PR still represents a cohesive unit of work.
+*   **Clear Dependencies:** PR1 is foundational. PR2 and PR3 can potentially be developed in parallel but depend on PR1 being merged. PR4 depends on all previous PRs.
+*   **Easier Review:** Reviewers can focus on the build system, then the new features, then the tests, and finally the documentation.
+
 
 **Pull Request Location:** [https://github.com/OHF-Voice/piper1-gpl/pull/21](https://github.com/OHF-Voice/piper1-gpl/pull/21)
 
@@ -31,7 +75,7 @@ The following plan was executed to prepare the `feat/termux-build-pr` branch for
     *   **Added Files (from `termux-build-improvements`):**
         *   `Architecture_materials/Mermaid_02.md`
         *   `Architecture_materials/Mermaid_Piper_02.png`
-        *   `build_monotonic_align.sh`
+        
         *   `libpiper/clean_text.cpp`
         *   `libpiper/piper.cpp`
         *   `libpiper/say.cpp`
