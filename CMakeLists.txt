@@ -4,120 +4,66 @@
 cmake_minimum_required(VERSION 3.26)
 project(piper LANGUAGES C CXX)
 
-if(ANDROID)
-    # Termux/Android specific handling for ONNX Runtime and espeak-ng
-    set(ONNX_RUNTIME_VERSION "1.22.0") # Match the version from README.md
-    set(ONNX_RUNTIME_AAR_URL "https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime-android/${ONNX_RUNTIME_VERSION}/onnxruntime-android-${ONNX_RUNTIME_VERSION}.aar")
-    set(ONNX_RUNTIME_DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/onnxruntime_download)
-    set(ONNX_RUNTIME_EXTRACT_DIR ${CMAKE_BINARY_DIR}/onnxruntime_extracted)
-    set(ONNX_RUNTIME_LIB_PATH ${ONNX_RUNTIME_EXTRACT_DIR}/jni/arm64-v8a/libonnxruntime.so)
+include(ExternalProject)
 
-    # Create download and extract directories
-    file(MAKE_DIRECTORY ${ONNX_RUNTIME_DOWNLOAD_DIR})
-    file(MAKE_DIRECTORY ${ONNX_RUNTIME_EXTRACT_DIR})
+# scikit-build-core will forward Python_* variables
+find_package(Python COMPONENTS Development.Module Development.SABIModule REQUIRED)
 
-    # Download ONNX Runtime AAR
-    file(DOWNLOAD ${ONNX_RUNTIME_AAR_URL} ${ONNX_RUNTIME_DOWNLOAD_DIR}/onnxruntime-android-${ONNX_RUNTIME_VERSION}.aar
-         STATUS download_status
-         LOG download_log)
+# Install location for espeak-ng
+set(ESPEAKNG_BUILD_DIR ${CMAKE_BINARY_DIR}/espeak_ng)
+set(ESPEAKNG_INSTALL_DIR ${CMAKE_BINARY_DIR}/espeak_ng-install)
 
-    if(NOT download_status EQUAL 0)
-        message(FATAL_ERROR "Failed to download ONNX Runtime AAR: ${download_log}")
-    endif()
-
-    # Extract libonnxruntime.so
-    execute_process(COMMAND ${CMAKE_COMMAND} -E unzip ${ONNX_RUNTIME_DOWNLOAD_DIR}/onnxruntime-android-${ONNX_RUNTIME_VERSION}.aar
-                    ${ONNX_RUNTIME_EXTRACT_DIR}
-                    RESULT_VARIABLE unzip_result
-                    OUTPUT_VARIABLE unzip_output
-                    ERROR_VARIABLE unzip_error)
-
-    if(NOT unzip_result EQUAL 0)
-        message(FATAL_ERROR "Failed to extract ONNX Runtime AAR: ${unzip_error}")
-    endif()
-
-    # Set espeak-ng and ONNX Runtime libraries for Android
-    # For Termux, we assume espeak-ng is system-installed via pkg
-    find_library(ESPEAKNG_LIB espeak-ng PATHS /data/data/com.termux/files/usr/lib NO_DEFAULT_PATH)
-    if(NOT ESPEAKNG_LIB)
-        message(FATAL_ERROR "espeak-ng library not found. Please install it via 'pkg install espeak'.")
-    endif()
-
-    set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_LIB})
-    set(UCD_STATIC_LIB "") # Not needed for system espeak-ng
-    set(ONNX_RUNTIME_LIB ${ONNX_RUNTIME_LIB_PATH})
-
-    # Add ONNX Runtime include directory (assuming it's within the extracted AAR)
-    include_directories(${ONNX_RUNTIME_EXTRACT_DIR}/jni/arm64-v8a/include)
-
-    # Add Termux system include directory for espeak-ng headers
-    include_directories(/data/data/com.termux/files/usr/include)
-
+if(WIN32)
+    # Special handling for Windows
+    set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_INSTALL_DIR}/lib/espeak-ng.lib)
+    set(UCD_STATIC_LIB ${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external-build/src/ucd-tools/ucd.lib)
 else()
-    # Original espeak-ng ExternalProject_Add for non-Android platforms
-    include(ExternalProject)
-
-    # Install location for espeak-ng
-    set(ESPEAKNG_BUILD_DIR ${CMAKE_BINARY_DIR}/espeak_ng)
-    set(ESPEAKNG_INSTALL_DIR ${CMAKE_BINARY_DIR}/espeak_ng-install)
-
-    if(WIN32)
-        # Special handling for Windows
-        set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_INSTALL_DIR}/lib/espeak-ng.lib)
-        set(UCD_STATIC_LIB ${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external-build/src/ucd-tools/ucd.lib)
-    else()
-        set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_INSTALL_DIR}/lib/libespeak-ng.a)
-        set(UCD_STATIC_LIB ${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external-build/src/ucd-tools/libucd.a)
-    endif()
-
-    ExternalProject_Add(espeak_ng_external
-        GIT_REPOSITORY https://github.com/espeak-ng/espeak-ng.git
-        GIT_TAG 212928b394a96e8fd2096616bfd54e17845c48f6  # 2025-Mar-22
-        PREFIX ${ESPEAKNG_BUILD_DIR}
-        CMAKE_ARGS
-            -DCMAKE_INSTALL_PREFIX=${ESPEAKNG_INSTALL_DIR}
-            -DBUILD_SHARED_LIBS:BOOL=OFF
-            -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
-            -DUSE_ASYNC:BOOL=OFF
-            -DUSE_MBROLA:BOOL=OFF
-            -DUSE_LIBSONIC:BOOL=OFF
-            -DUSE_LIBPCAUDIO:BOOL=OFF
-            -DUSE_KLATT:BOOL=OFF
-            -DUSE_SPEECHPLAYER:BOOL=OFF
-            -DEXTRA_cmn:BOOL=ON
-            -DEXTRA_ru:BOOL=ON
-            # Need to explicitly add ucd include directory for CI
-            "-DCMAKE_C_FLAGS=-D_FILE_OFFSET_BITS=64 -I${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external/src/ucd-tools/src/include"
-        BUILD_BYPRODUCTS
-            ${ESPEAKNG_STATIC_LIB}
-            ${UCD_STATIC_LIB}
-        UPDATE_DISCONNECTED TRUE
-    )
-
-    include_directories(
-        ${ESPEAKNG_INSTALL_DIR}/include
-    )
+    set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_INSTALL_DIR}/lib/libespeak-ng.a)
+    set(UCD_STATIC_LIB ${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external-build/src/ucd-tools/libucd.a)
 endif()
+
+ExternalProject_Add(espeak_ng_external
+    GIT_REPOSITORY https://github.com/espeak-ng/espeak-ng.git
+    GIT_TAG 212928b394a96e8fd2096616bfd54e17845c48f6  # 2025-Mar-22
+    PREFIX ${ESPEAKNG_BUILD_DIR}
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=${ESPEAKNG_INSTALL_DIR}
+        -DBUILD_SHARED_LIBS:BOOL=OFF
+        -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
+        -DUSE_ASYNC:BOOL=OFF
+        -DUSE_MBROLA:BOOL=OFF
+        -DUSE_LIBSONIC:BOOL=OFF
+        -DUSE_LIBPCAUDIO:BOOL=OFF
+        -DUSE_KLATT:BOOL=OFF
+        -DUSE_SPEECHPLAYER:BOOL=OFF
+        -DEXTRA_cmn:BOOL=ON
+        -DEXTRA_ru:BOOL=ON
+        # Need to explicitly add ucd include directory for CI
+        "-DCMAKE_C_FLAGS=-D_FILE_OFFSET_BITS=64 -I${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external/src/ucd-tools/src/include"
+    BUILD_BYPRODUCTS
+        ${ESPEAKNG_STATIC_LIB}
+        ${UCD_STATIC_LIB}
+    UPDATE_DISCONNECTED TRUE
+)
+
+include_directories(
+    ${ESPEAKNG_INSTALL_DIR}/include
+)
 
 # espeak bridge
 add_library(espeakbridge MODULE
     src/piper/espeakbridge.c
 )
 
-if(ANDROID)
-    target_link_libraries(espeakbridge
-        ${ESPEAKNG_LIB}
-        ${ONNX_RUNTIME_LIB}
-        Python::SABIModule
-    )
-else()
-    add_dependencies(espeakbridge espeak_ng_external)
-    target_link_libraries(espeakbridge
-        ${ESPEAKNG_STATIC_LIB}
-        ${UCD_STATIC_LIB}
-        Python::SABIModule
-    )
-endif()
+add_dependencies(espeakbridge espeak_ng_external)
+target_link_libraries(espeakbridge
+    ${ESPEAKNG_STATIC_LIB}
+    ${UCD_STATIC_LIB}
+    Python::SABIModule
+)
+target_include_directories(espeakbridge PRIVATE
+    ${ESPEAKNG_INSTALL_DIR}/include
+)
 
 if(WIN32)
     # Fix dll thunk issue (__imp_SYMBOL not found)
@@ -139,4 +85,12 @@ install(TARGETS espeakbridge
     RUNTIME DESTINATION .
 )
 
+# Copy espeak-ng-data
+set(DATA_SRC ${CMAKE_BINARY_DIR}/espeak_ng-install/share/espeak-ng-data)
+set(DATA_DST ${CMAKE_CURRENT_SOURCE_DIR}/src/piper/espeak-ng-data)
 
+add_custom_target(copy_espeak_ng_data ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${DATA_SRC} ${DATA_DST}
+    DEPENDS espeak_ng_external
+    COMMENT "Copying espeak-ng-data after espeak-ng external project builds"
+)
