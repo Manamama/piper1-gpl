@@ -1,0 +1,11 @@
+Hello maintainers,
+
+We are writing to follow up on your feedback regarding the scope and size of this pull request (#21). We understand that it represents a significant set of changes.
+
+However, we want to emphasize that these improvements have been meticulously developed and are submitted as a cohesive, fully functional unit. Considerable effort has been invested in integrating these changes, ensuring their stability, and verifying their performance across various environments. Indeed, as the user of this system, I have personally conducted extensive real-world testing, installing and validating the package successfully no less than ten times to ensure its robustness and the seamless integration of all components. This work was undertaken to deliver a comprehensive and reliable enhancement to the `piper1-gpl` project.
+
+Given the substantial work involved in preparing and validating this complete package, our current submission reflects the intended and tested state of these improvements. If, for your internal review processes, you find it more convenient to examine these changes in smaller, segmented portions, we respectfully suggest that you are welcome to split this pull request into more granular units at your discretion.
+
+We firmly believe that these contributions offer significant value and represent a substantial step forward for the project. We remain committed to seeing these valuable improvements integrated into the upstream repository.
+
+Thank you for your time and consideration.
