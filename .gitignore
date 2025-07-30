@@ -4,6 +4,7 @@
 tmp/
 
 *.py[cod]
+__pycache__/
 *.egg
 build
 htmlcov
@@ -22,3 +23,15 @@ _skbuild/
 lightning_logs/
 espeak-ng/
 third_party/
+
+# Generated or temporary audio files
+output.wav
+a.wav
+raw_audio.s16le
+sine_wave.s16le
+
+# Gemini-related files and temporary directories
+.gemini/
+GEMINI_not_active.md
+Piper_fixes_fsck_archive/
+git_cleanup_plan.md
