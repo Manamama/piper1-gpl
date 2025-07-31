@@ -123,3 +123,12 @@ After the history rewrite is complete and gently-pushed, we need to perform seve
 
 ---
 
+## Results
+
+The history cleanup was successful.
+
+*   **Initial `.git` directory size:** ~700 MB
+*   **Final `.git` directory size:** 45 MB
+
+This represents a reduction of over 93% in the repository's size.
+
