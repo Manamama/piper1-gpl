@@ -50,6 +50,8 @@ If my planned action fails this check—if it is a tactical solution that underm
 
 When testing the ready `piper` package do use the audio models which are located in `~/.cache/piper`. For the API synthesis test to pass, the `en_US-lessac-medium` voice model must be downloaded to `~/.cache/piper/` using `python3 -m piper.download_voices en_US-lessac-medium`. Do use piper's --help to learn how to
 
+**UPDATE:** The root cause of recent build failures (related to both compile-time and runtime linking errors) has been identified. The full analysis and remediation plan can be found in `BUILD_FAILURE_ANALYSIS.md`.
+
 ## Known Issues
 
 ### ImportError: espeakbridge
@@ -213,3 +215,52 @@ This section outlines the detailed steps for preparing the `feat/termux-build-pr
 9.  **Push to Fork:** Push the `feat/termux-build-pr` branch to the user's fork.
     `git push origin feat/termux-build-pr`
 10. **Create Pull Request:** Use `gh pr create` to open the PR to `OHF-Voice/piper1-gpl:main`.
+
+---
+
+## Audio Strategy: Rely on Native Linking
+
+Recent audio playback issues have highlighted a critical principle for development in Termux: **direct linking against native system libraries is superior to using complex, ported abstractions.**
+
+*   **The Problem:** Solutions relying on ported Linux sound servers like **PulseAudio** or toolkits like **SoX** have proven unreliable and difficult to debug on Android. They introduce unnecessary layers that conflict with the native Android audio stack.
+*   **The Solution:** The most successful and stable approach is to use tools that link directly against native Android system libraries. The `play-audio` utility is the prime example. As confirmed by `ldd`, it links directly to `libOpenSLES.so`, the native Android audio library. This direct path is efficient, low-latency, and reliable.
+*   **Our Guiding Principle:** For audio output and other low-level hardware interactions, we will prioritize solutions that leverage direct linking to the underlying system's `.so` libraries. The `ldd` command will be a key diagnostic tool to verify an executable's dependencies and ensure it follows this principle. This strategy is critical for avoiding and fixing bugs related to hardware integration on Android.
+
+---
+
+## Known Issue: Android Runtime Linking Failure
+
+**Status:** Under Investigation (Testing based on user reports)
+
+Based on real-world reports, a critical runtime linking failure can occur on Android after a successful installation. The application may fail to start or crash with an "undefined symbol" error.
+
+### Root Cause (`ldd` Analysis)
+
+The issue stems from the hybrid build strategy for `espeak-ng` on Android:
+
+1.  **Private Shared Library:** The build process compiles a private, shared `libespeak-ng.so` which is used to link the final `espeakbridge.so` module.
+2.  **`RPATH` Issue:** The installed `espeakbridge.so` module may lack a correct `RPATH` (runtime search path) pointing to the location of this private `libespeak-ng.so`.
+3.  **Incorrect Linker Resolution:** At runtime, the Android dynamic linker fails to find the private library. It falls back to searching system paths and incorrectly loads the generic `libespeak-ng.so` that was installed via `pkg`.
+4.  **ABI Mismatch:** This causes a fatal ABI (Application Binary Interface) mismatch, as `espeakbridge.so` was compiled to work with the private library, not the system one, leading to a crash.
+
+We are currently testing solutions to ensure the `RPATH` of the `espeakbridge.so` module is correctly configured to point to its private `libespeak-ng.so`, which should resolve this failure.
+
+---
+
+## Architectural Principle: Disambiguating Dependency Roles
+
+A key lesson from the recent build failures is the importance of understanding and controlling the exact role of our dependencies. A library like `espeak-ng` can have multiple functions, and failing to disable the ones we don't need can introduce critical build and runtime errors.
+
+### The Two Functions of `espeak-ng`
+
+1.  **Phonemization Engine (What Piper NEEDS):** This is `espeak-ng`'s core linguistic capability. It takes input text ("Hello World") and converts it into a stream of phonemes (`həˈloʊ wɜːld`). This is the **only** part of `espeak-ng` that `piper` uses. It acts as the "front-end" that feeds the `piper` neural network.
+
+2.  **Audio Player (What Piper DOES NOT NEED):** `espeak-ng` can also function as a complete, standalone text-to-speech system. It has its own simple synthesizer and "speech backends" to send the audio it generates to your speakers using libraries like PulseAudio, ALSA, etc.
+
+### Why We Must Disable the Audio Player
+
+`Piper` does not use `espeak-ng`'s built-in audio player. Instead, `piper` takes the phonemes from `espeak-ng` and processes them through its own high-quality neural network models via `onnxruntime` to generate the final audio.
+
+The problem is that when we build `espeak-ng` from source, its `configure` script automatically detects and enables its own audio player backends (like the PulseAudio one). This causes our private `libespeak-ng.so` to be linked against `libpulse.so`, introducing the unwanted dependency and causing the runtime linking failures.
+
+This principle of disabling unused features in dependencies is key to creating a stable and minimal build.
