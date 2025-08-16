@@ -49,6 +49,8 @@ For standard desktop platforms, the build process also uses `CMake` to automate 
 - **`espeak-ng`:** This dependency is handled automatically. The build script will download and compile `espeak-ng` from source, then **statically link** it into the final `espeakbridge` library. You do not need to install it manually.
 - **`onnxruntime`:** <font color="red">**CURRENTLY INCOMPLETE:**</font> The build scripts for standard platforms **do not yet link against `onnxruntime`**. This is a known issue that will prevent the compiled program from functioning.
 
+- Theory: [Deep Wiki's analysis of this repo](https://deepwiki.com/Manamama/piper1-gpl/1-overview)
+
 **The original, manual build guide and usage examples are preserved below for reference.**
 
 ---
